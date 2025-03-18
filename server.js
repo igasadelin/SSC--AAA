@@ -9,7 +9,7 @@ const PORT = 3000; // Definim portul pe care rulează serverul
 app.use(express.json()); // Middleware pentru parsarea request-urilor JSON
 
 // Cheia secretă folosită pentru semnarea token-urilor JWT
-const SECRET_KEY = "secret123"; 
+const SECRET_KEY = "secret123";
 
 // Lista de utilizatori simulați (într-o aplicație reală, ar fi stocați într-o bază de date)
 const users = [
@@ -51,7 +51,7 @@ function authorize(roles) {
   return (req, res, next) => {
     const authHeader = req.headers.authorization; // Preluăm header-ul Authorization
 
-    if (!authHeader) 
+    if (!authHeader)
       return res.status(403).json({ message: "No token provided" }); // Dacă nu există token, returnăm eroare 403 (Forbidden)
 
     const token = authHeader.split(" ")[1]; // Extragem token-ul din header
@@ -60,7 +60,7 @@ function authorize(roles) {
     jwt.verify(token, SECRET_KEY, (err, decoded) => {
       if (err) return res.status(403).json({ message: "Invalid token" }); // Dacă token-ul e invalid, returnăm 403
 
-      if (!roles.includes(decoded.role)) 
+      if (!roles.includes(decoded.role))
         return res.status(403).json({ message: "Forbidden" }); // Dacă rolul utilizatorului nu este permis, returnăm 403
 
       req.user = decoded; // Adăugăm utilizatorul decodificat în request pentru a fi folosit mai departe
@@ -87,10 +87,9 @@ app.get("/user", authorize(["admin", "user"]), (req, res) => {
 });
 
 // Pornim serverul pe portul definit
-app.listen(PORT, () => 
+app.listen(PORT, () =>
   console.log(`Server running on http://localhost:${PORT}`)
 );
-
 
 // Rularea serverului: node server.js
 // Accesarea serverului: http://localhost:3000
@@ -108,3 +107,8 @@ app.listen(PORT, () =>
 //Fiecare acțiune importantă (autentificare, acces la rute protejate, încercări eșuate) este logată în audit.log.
 
 //cat audit.log - pentru afisarea logurilor
+
+//Posibile imbunatatiri:
+// Salvarea utilizatorilor într-o bază de date (în loc să-i avem hardcodați).
+// Hashing pentru parole folosind bcrypt.
+// Îmbunătățirea auditului → scrierea logurilor într-un fișier JSON sau într-o bază de date pentru analiză ulterioară.

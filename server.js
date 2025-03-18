@@ -13,7 +13,13 @@ const SECRET_KEY = "secret123"; // Cheie secretă folosită pentru semnarea toke
 
 // Simulăm o bază de date cu utilizatori
 let users = [
-  { id: 1, username: "admin", password: "admin123", role: "admin", secret: null },
+  {
+    id: 1,
+    username: "admin",
+    password: "admin123",
+    role: "admin",
+    secret: null,
+  },
   { id: 2, username: "user", password: "user123", role: "user", secret: null },
 ];
 
@@ -29,14 +35,20 @@ app.post("/setup-2fa", (req, res) => {
   const user = users.find((u) => u.username === username);
   if (!user) return res.status(404).json({ message: "User not found" });
 
+  // todo: bail if 2FA already set up
+
   // Generează o cheie secretă pentru utilizator
   const secret = speakeasy.generateSecret({ length: 20 });
   user.secret = secret.base32;
 
   // Generăm un cod QR pentru scanare în aplicația 2FA
-  qrcode.toDataURL(secret.otpauth_url, (err, imageUrl) => {
+  qrcode.toDataURL(secret.otpauth_url, async (err, imageUrl) => {
+    // todo: return secret to user
     if (err) return res.status(500).json({ message: "QR generation error" });
-    
+
+    const string = await qrcode.toString(secret.otpauth_url, { type: "terminal" });
+    console.log(string);
+
     auditLog(`2FA setup for user: ${username}`); // Logăm setup-ul 2FA
     res.json({ qrCode: imageUrl, secret: secret.base32 }); // Returnăm QR code-ul și cheia secretă
   });
@@ -45,8 +57,10 @@ app.post("/setup-2fa", (req, res) => {
 // Endpoint de login cu 2FA
 app.post("/login", (req, res) => {
   const { username, password, otp } = req.body;
-  const user = users.find((u) => u.username === username && u.password === password);
-  
+  const user = users.find(
+    (u) => u.username === username && u.password === password
+  );
+
   if (!user) {
     auditLog(`Failed login attempt for username: ${username}`); // Logăm tentativa eșuată
     return res.status(401).json({ message: "Invalid credentials" });
@@ -68,7 +82,9 @@ app.post("/login", (req, res) => {
   }
 
   // Creăm un token JWT
-  const token = jwt.sign({ id: user.id, role: user.role }, SECRET_KEY, { expiresIn: "1h" });
+  const token = jwt.sign({ id: user.id, role: user.role }, SECRET_KEY, {
+    expiresIn: "1h",
+  });
 
   auditLog(`User ${username} logged in`); // Logăm autentificarea reușită
   res.json({ token }); // Returnăm token-ul JWT
@@ -78,16 +94,18 @@ app.post("/login", (req, res) => {
 function authorize(roles) {
   return (req, res, next) => {
     const authHeader = req.headers.authorization;
-    if (!authHeader) return res.status(403).json({ message: "No token provided" });
+    if (!authHeader)
+      return res.status(403).json({ message: "No token provided" });
 
     const token = authHeader.split(" ")[1];
-    
+
     // Verificăm validitatea token-ului JWT
     jwt.verify(token, SECRET_KEY, (err, decoded) => {
       if (err) return res.status(403).json({ message: "Invalid token" });
-      
+
       // Verificăm dacă utilizatorul are acces la această resursă
-      if (!roles.includes(decoded.role)) return res.status(403).json({ message: "Forbidden" });
+      if (!roles.includes(decoded.role))
+        return res.status(403).json({ message: "Forbidden" });
 
       req.user = decoded; // Salvăm detaliile utilizatorului în request
       next(); // Continuăm execuția request-ului
@@ -111,4 +129,29 @@ app.get("/user", authorize(["admin", "user"]), (req, res) => {
 });
 
 // Pornim serverul pe portul definit
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+app.listen(PORT, () =>
+  console.log(`Server running on http://localhost:${PORT}`)
+);
+
+// Rulare server: node server.js
+
+// POST : http://localhost:3000/setup-2fa
+// {
+//   "username": "user"
+// }
+
+//copiez qrCode
+
+// POST : http://localhost:3000/login
+// {
+//   "username" : "user",
+//   "password" : "user123",
+//   "otp" : ""
+// }
+
+//copiez token
+
+// GET : http://localhost:3000/user
+// Key: Authorization , Value : Bearer Token
+// GET : http://localhost:3000/admin
+// Key: Authorization , Value : Bearer Token

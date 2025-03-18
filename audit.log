@@ -6,3 +6,7 @@
 2025-03-18T00:01:34.185Z - Failed login attempt for username: user1
 2025-03-18T00:01:49.116Z - Failed login attempt for username: user1
 2025-03-18T00:02:06.190Z - Failed login attempt for username: user2
+2025-03-18T07:11:29.614Z - 2FA setup for user: admin
+2025-03-18T07:14:45.795Z - User admin logged in
+2025-03-18T07:15:44.623Z - Admin access by user ID: 1
+2025-03-18T07:20:02.597Z - 2FA setup for user: user

@@ -1,5 +1,3 @@
-// app/login/page.js
-
 "use client";
 
 import { useState } from "react";
@@ -9,22 +7,32 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setMessage("");
 
-    const res = await fetch("/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-    const data = await res.json();
-    setMessage(data.message);
+      const data = await res.json();
 
-    if (res.status === 200) {
-      router.push("/success");
+      if (res.ok) {
+        router.push("/success");
+      } else {
+        setMessage(data.message || "Login failed");
+      }
+    } catch (err) {
+      setMessage("Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -63,9 +71,14 @@ export default function Login() {
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300"
+            disabled={isLoading}
+            className={`w-full text-white py-2 rounded-lg transition duration-300 ${
+              isLoading
+                ? "bg-blue-300 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700"
+            }`}
           >
-            Login
+            {isLoading ? "Logging in..." : "Login"}
           </button>
         </form>
         {message && (

@@ -123,7 +123,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/igas/Developer/Facultate/an3sem2/SSC/ssc-aaa/ssc-aaa-nextjs/prisma/node_modules/@prisma/client",
+      "value": "/Users/igas/Developer/Facultate/an3sem2/SSC/ssc-aaa/ssc-aaa-nextjs/lib/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -141,10 +141,10 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../../../.env",
-    "schemaEnvPath": "../../../../.env"
+    "rootEnvPath": null,
+    "schemaEnvPath": "../../../.env"
   },
-  "relativePath": "../../..",
+  "relativePath": "../../../prisma",
   "clientVersion": "6.7.0",
   "engineVersion": "3cff47a7f5d65c3ea74883f1d736e41d68ce91ed",
   "datasourceNames": [
@@ -155,17 +155,17 @@ const config = {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "prisma+postgres://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiZDQxMDk2NGUtZGQ0Yy00YjRlLTgyN2QtZDdlYmRmNTA1ZWQ3IiwidGVuYW50X2lkIjoiZmFkMzA1NzJhZjdiZjYyYzZjOTE1OTBkMmVmZThmYTY3NzQxNWU1NmRiZTZmNGJjZGU0MGVhNDIzYjM5ZWI0YyIsImludGVybmFsX3NlY3JldCI6IjgxMDNhNTQwLTdlMjQtNDgyNS1iZGUwLWRiNzIzZmNhOTQ2OSJ9.rdv6i1wwHK2Nsmccqivmw0_S66hvYxHPodkPhDBSI_8"
+        "value": "prisma+postgres://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiM2M3ODhhMjAtOGZmZS00Mjg4LTgyNGMtZmQ2MGRkY2M1ODRkIiwidGVuYW50X2lkIjoiZmFkMzA1NzJhZjdiZjYyYzZjOTE1OTBkMmVmZThmYTY3NzQxNWU1NmRiZTZmNGJjZGU0MGVhNDIzYjM5ZWI0YyIsImludGVybmFsX3NlY3JldCI6IjgxMDNhNTQwLTdlMjQtNDgyNS1iZGUwLWRiNzIzZmNhOTQ2OSJ9.d4iH-Lpb1jFRLYMYEv4nwOeFb2QJ5roUWrroEOiezJ8"
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"./node_modules/@prisma/client\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id       Int    @id @default(autoincrement())\n  email    String @unique\n  password String\n}\n",
-  "inlineSchemaHash": "c2e4e4140cf3e805a1ac522d56cc65170b8532bc4af39df204827f21fe05f11b",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../lib/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id       String @id @default(cuid())\n  email    String @unique\n  password String\n}\n",
+  "inlineSchemaHash": "e80b8666b82e30cb7805d5392c1a75b39bff9479d99d96a955352f8a0a05d9e8",
   "copyEngine": false
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"dbName\":null,\"schema\":null,\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":true,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"Int\",\"nativeType\":null,\"default\":{\"name\":\"autoincrement\",\"args\":[]},\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"email\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":true,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"password\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false}],\"primaryKey\":null,\"uniqueFields\":[],\"uniqueIndexes\":[],\"isGenerated\":false}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"dbName\":null,\"schema\":null,\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":true,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"String\",\"nativeType\":null,\"default\":{\"name\":\"cuid\",\"args\":[1]},\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"email\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":true,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"password\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false}],\"primaryKey\":null,\"uniqueFields\":[],\"uniqueIndexes\":[],\"isGenerated\":false}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = undefined
 config.compilerWasm = undefined

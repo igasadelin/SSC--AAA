@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [twoFactorCode, setTwoFactorCode] = useState("");
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -19,14 +20,14 @@ export default function Login() {
       const res = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, code: twoFactorCode }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
         // Redirect to the 2FA verification page after successful login
-        router.push("/2fa");
+        router.push("/success");
       } else {
         setMessage(data.message || "Login failed");
       }
@@ -68,6 +69,20 @@ export default function Login() {
               required
               className="w-full px-4 py-2 border rounded-lg text-black placeholder-gray-400"
               placeholder="********"
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-700 font-medium mb-1">
+              2FA Code
+            </label>
+            <input
+              type="string"
+              value={twoFactorCode}
+              onChange={(e) => setTwoFactorCode(e.target.value)}
+              required
+              className="w-full px-4 py-2 border rounded-lg text-black placeholder-gray-400"
+              placeholder="123456"
             />
           </div>
 

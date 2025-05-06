@@ -40,7 +40,7 @@ export async function POST(request) {
       JSON.stringify({
         message: "User created successfully",
         qrCodeUrl, // Send the QR code URL to the frontend
-      }), 
+      }),
       { status: 201 }
     );
   } catch (error) {

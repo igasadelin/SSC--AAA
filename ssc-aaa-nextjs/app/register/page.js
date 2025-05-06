@@ -22,7 +22,12 @@ export default function Register() {
     setMessage(data.message);
 
     if (res.status === 201) {
-      router.push("/2fa");
+      router.push(
+        "/2fa?email=" +
+          encodeURIComponent(email) +
+          "&qr=" +
+          encodeURIComponent(data.qrCodeUrl)
+      );
     }
   };
 

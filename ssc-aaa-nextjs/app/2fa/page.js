@@ -17,6 +17,8 @@ export default function TwoFASetup() {
     if (emailFromQuery && qr) {
       setEmail(emailFromQuery);
       setQrCodeUrl(decodeURIComponent(qr));
+    } else {
+      router.push("/register");
     }
   }, [searchParams]);
 

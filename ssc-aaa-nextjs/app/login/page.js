@@ -25,7 +25,8 @@ export default function Login() {
       const data = await res.json();
 
       if (res.ok) {
-        router.push("/success");
+        // Redirect to the 2FA verification page after successful login
+        router.push("/2fa");
       } else {
         setMessage(data.message || "Login failed");
       }
@@ -40,7 +41,7 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
         <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">
-          Welcome Back
+          Login
         </h1>
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
@@ -52,7 +53,7 @@ export default function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border rounded-lg text-black placeholder-gray-400"
               placeholder="you@example.com"
             />
           </div>
@@ -65,14 +66,15 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border rounded-lg text-black placeholder-gray-400"
               placeholder="********"
             />
           </div>
+
           <button
             type="submit"
             disabled={isLoading}
-            className={`w-full text-white py-2 rounded-lg transition duration-300 ${
+            className={`w-full text-white py-2 rounded-lg ${
               isLoading
                 ? "bg-blue-300 cursor-not-allowed"
                 : "bg-blue-600 hover:bg-blue-700"
@@ -88,6 +90,12 @@ export default function Login() {
           Don't have an account?{" "}
           <a href="/register" className="text-blue-600 hover:underline">
             Register
+          </a>
+        </p>
+        <p className="mt-1 text-center text-sm text-gray-600">
+          Return to{" "}
+          <a href="/" className="text-blue-600 hover:underline">
+            Home
           </a>
         </p>
       </div>

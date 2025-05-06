@@ -1,34 +1,39 @@
-// app/api/login/route.js
+import { verifyTOTP } from "@/lib/2fa"; // Adjust the path if necessary
 import bcrypt from "bcryptjs";
 import prisma from "@/lib/prisma";
 
 export async function POST(request) {
-  const { email, password } = await request.json();
+  const { email, password, code } = await request.json();
 
-  // Find the user by email
+  // Find user by email
   const user = await prisma.user.findUnique({
     where: { email },
   });
 
   if (!user) {
-    return new Response(
-      JSON.stringify({ message: "Invalid email or password" }),
-      { status: 400 }
-    );
+    return new Response(JSON.stringify({ message: "User not found" }), {
+      status: 400,
+    });
   }
 
-  // Compare the hashed password
-  const isPasswordCorrect = await bcrypt.compare(password, user.password);
-
-  if (!isPasswordCorrect) {
-    return new Response(
-      JSON.stringify({ message: "Invalid email or password" }),
-      { status: 400 }
-    );
+  // Check if password is valid
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) {
+    return new Response(JSON.stringify({ message: "Invalid password" }), {
+      status: 400,
+    });
   }
 
-  // For a successful login, you can return a token, user details, etc.
-  return new Response(JSON.stringify({ message: "Login successful", user }), {
+  // Verify 2FA code
+  const isCodeValid = verifyTOTP(code, user.twoFactorSecret); // Use verifyTOTP here
+  if (!isCodeValid) {
+    return new Response(JSON.stringify({ message: "Invalid 2FA code" }), {
+      status: 400,
+    });
+  }
+
+  // Proceed with successful login
+  return new Response(JSON.stringify({ message: "Login successful" }), {
     status: 200,
   });
 }

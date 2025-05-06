@@ -1,5 +1,3 @@
-// app/register/page.js
-
 "use client";
 
 import { useState } from "react";
@@ -24,7 +22,7 @@ export default function Register() {
     setMessage(data.message);
 
     if (res.status === 201) {
-      router.push("/login");
+      router.push("/2fa");
     }
   };
 
@@ -44,7 +42,7 @@ export default function Register() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black placeholder-gray-400"
               placeholder="you@example.com"
             />
           </div>
@@ -57,7 +55,7 @@ export default function Register() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black placeholder-gray-400"
               placeholder="********"
             />
           </div>
@@ -75,6 +73,12 @@ export default function Register() {
           Already have an account?{" "}
           <a href="/login" className="text-blue-600 hover:underline">
             Login
+          </a>
+        </p>
+        <p className="mt-1 text-center text-sm text-gray-600">
+          Return to{" "}
+          <a href="/" className="text-blue-600 hover:underline">
+            Home
           </a>
         </p>
       </div>
